@@ -1,0 +1,52 @@
+<template>
+  <div>
+    <h1 style="margin-left: 10px;">
+      Übersicht
+    </h1>
+    <AccountCard 
+      v-for="account in accounts" 
+      :key="account.id"
+      sm="12"
+      :account="account"
+      class="accCard"
+      @click.native="openAccount(account.id)"
+    />
+  </div>
+</template>
+
+<script lang="ts">
+// @ is an alias to /src
+
+import { Component } from 'vue-property-decorator'
+import Vue from 'vue'
+import AccountCard from '@/components/dashboard/AccountCard.vue'
+
+@Component({
+  components: {
+    AccountCard
+  }
+})
+export default class Dashboard extends Vue{
+
+  private accounts = []
+
+  async beforeMount() {
+    await this.fetchAccounts() 
+  }
+
+  async fetchAccounts() {
+    const res = await this.axios.get('/accounts')
+    this.accounts = res.data
+  }
+
+  openAccount(id: number) {
+    this.$router.push(`/docs/${id}`)
+  }
+}
+</script>
+
+<style >
+    .accCard{ 
+      margin: 10px;
+    }
+</style>
