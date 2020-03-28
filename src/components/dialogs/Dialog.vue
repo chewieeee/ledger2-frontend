@@ -13,14 +13,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 
-@Component({
-   props: {
-      dialog: { default: false },
-   }
-})
+@Component
 export default class Dialog extends Vue {
+
+   @Prop({default: false})
+   dialog: boolean;
 
    closeDialog() {
       this.$emit("clickedOutside", true)
