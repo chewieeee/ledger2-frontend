@@ -60,11 +60,7 @@ const router = new VueRouter({
 
 const validateToken = async (token: string) => {
   const res = await api.post('/validate', {token: token})
-  if (res.status === 200) {
-    return true
-  }else{
-    return false
-  }
+  return (res.status === 200) ? true : false
 }
 
 router.beforeEach(async (to, from, next) => {
