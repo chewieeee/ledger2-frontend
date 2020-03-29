@@ -18,8 +18,8 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 @Component
 export default class Dialog extends Vue {
 
-   @Prop({default: false})
-   dialog: boolean;
+   @Prop()
+   dialog = false;
 
    closeDialog() {
       this.$emit("clickedOutside", true)

@@ -29,7 +29,10 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: Login
+    component: Login,
+    meta: {
+      requireAuth: false
+    }
   },
   {
     path: '/settings',
@@ -75,7 +78,7 @@ router.beforeEach(async (to, from, next) => {
       }
     }
 
-  if (to.matched.some(record => (record.meta.requireAuth))){
+  if (to.matched.some(record => (record.meta.requireAuth === true))){
     const token = Vue.cookies.get('token') as string
 
     if (token !== null) {

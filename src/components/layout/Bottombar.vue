@@ -8,11 +8,11 @@
       >
          <span>Konten</span>
          <v-icon>mdi-bank</v-icon>
-      </v-btn>
+      </v-btn> 
       <v-btn
          to="/report"
       >
-         <span>Reports</span>
+      <span>Reports</span>
          <v-icon>mdi-format-list-bulleted-type</v-icon>
       </v-btn>
       <v-btn

@@ -34,9 +34,9 @@ export default class App extends Vue {
     return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   }
 
-  beforceMounted() {
+  mounted() {
     this.setTokenInHeader()
-  }
+ }
   
   setTokenInHeader() {
     const token = this.$cookies.get('token')
@@ -47,8 +47,6 @@ export default class App extends Vue {
       this.axios.defaults.headers.common['x-token'] = token
     }
   }
-
-
 }
 </script>
 
