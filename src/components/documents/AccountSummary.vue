@@ -6,14 +6,14 @@
                   :cols="7" 
                   class="text-left pl-2 py-0" 
                >
-                  {{ accountDetails.title }}
+                  {{ account.title }}
                </v-col>
                <v-col 
                   :cols="5"
                   class="text-right pr-1 py-0"
                >
                   {{ 
-                     new Intl.NumberFormat("de-DE", format).format(accountDetails.balance) 
+                     new Intl.NumberFormat("de-DE", format).format(account.balance) 
                   }} 
                </v-col>
             </v-row>
@@ -24,13 +24,11 @@
 <script lang="ts">
 import {Vue, Component, Prop} from 'vue-property-decorator'
 import { numberFormat } from '../../shared/document'
-import { AccountDetails } from '../../shared/account'
-
 
 @Component
 export default class AccountSummary extends Vue {
    @Prop()
-   accountDetails: AccountDetails 
+   account: Account | undefined
 
    private format = numberFormat
 }

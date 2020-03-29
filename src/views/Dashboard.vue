@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 style="margin-left: 10px;">
+    <h1 style="margin-left: 10px;" class="font-weight-thin">
       Übersicht
     </h1>
     <AccountCard 
@@ -17,8 +17,7 @@
 <script lang="ts">
 // @ is an alias to /src
 
-import { Component } from 'vue-property-decorator'
-import Vue from 'vue'
+import { Vue, Component } from 'vue-property-decorator'
 import AccountCard from '@/components/dashboard/AccountCard.vue'
 
 @Component({
@@ -28,7 +27,7 @@ import AccountCard from '@/components/dashboard/AccountCard.vue'
 })
 export default class Dashboard extends Vue{
 
-  private accounts = []
+  private accounts: Account[] = []
 
   async beforeMount() {
     await this.fetchAccounts() 

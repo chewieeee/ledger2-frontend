@@ -77,8 +77,7 @@
 <script lang="ts">
 import { Vue, Component, Watch, Prop } from 'vue-property-decorator';
 import Dialog from '@/components/dialogs/Dialog.vue'
-import { Doc, numberFormat } from '../../shared/document';
-import Category from '../../shared/category'
+import { numberFormat } from '../../shared/document';
 import moment from 'moment';
 
 @Component({
@@ -112,7 +111,7 @@ export default class UpdateDocument extends Vue{
       await this.fetchCategories(this.selectAccount)
    }
 
-   get selectAccount() {
+      get selectAccount() {
       return Number(this.$route.params.account)
    }
 

@@ -4,7 +4,7 @@
          class="card"
       >
          <AccountSummary 
-            :accountDetails="accountDetails"
+            :account="account"
          />
          <v-card-subtitle class="my-0 py-0">
             <v-text-field
@@ -90,8 +90,7 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator'
-import { Doc, numberFormat } from '../shared/document'
-import { AccountDetails } from '../shared/account'
+import { numberFormat } from '../shared/document'
 import DocItem from '@/components/documents/DocumentItem.vue'
 import UpdateDocument from '@/components/documents/UpdateDocument.vue'
 import AccountSummary from '@/components/documents/AccountSummary.vue'
@@ -108,7 +107,7 @@ export default class Documents extends Vue{
    private format = numberFormat;  
 
    // Account Summary
-   private accountDetails = new AccountDetails({id: 0, iban: '', title: '', balance: 0});
+   private account: Account = {} as Account
    private searchInput = ''
 
    // Documents
@@ -120,7 +119,7 @@ export default class Documents extends Vue{
    }
 
    // Update dialog 
-   private selectedDoc: Doc = {"id": 0, "name": "name", "iban": "iban", "amount": 0.00 , "description": "description", "date": new Date, "category": "category"}
+   private selectedDoc: Doc = {} as Doc
    private dialog = false;
 
    async beforeMount() {
@@ -130,24 +129,24 @@ export default class Documents extends Vue{
    async fetchData() {
       Promise.all([
          this.fetchDocuments(this.selectedAccount),
-         this.fetchAccountDetails(this.selectedAccount),
+         this.fetchAccount(this.selectedAccount),
          this.fetchOpeningBalance(this.selectedAccount)
       ])
    }
 
-   async fetchDocuments(account: number, periodFrom?: string){
+   async fetchDocuments(account: number){
       const res = await this.axios.get(`/documents/${account}/${this.period.from}/${this.period.to}`)
       this.documents = res.data.map((item: Doc) => {return item as Doc})
    }
 
    async fetchMoreDocuments() {
       this.period.from = moment(this.period.from).subtract(1, "month").format("YYYY-MM-DD")
-      await this.fetchData()
+      await this.fetchDocuments(this.selectedAccount)
    }
 
-   async fetchAccountDetails(account: number, date?: string){
+   async fetchAccount(account: number){
       const res = await this.axios.get(`/accounts/details/${account}`)
-      this.accountDetails = new AccountDetails(res.data[0])
+      this.account = res.data[0] as Account
    }
 
    async fetchOpeningBalance(account: number) {
@@ -168,7 +167,9 @@ export default class Documents extends Vue{
       this.dialog = !this.dialog
    }
 
+   // eslint-disable-next-line
    get documentGrid(): Record<string, any> {
+      // eslint-disable-next-line
       const grid: Record<string, any>[] = []
       const data = this.filter(this.documents)
       let dates = [... new Set(data.map(x => x.date))]
@@ -194,37 +195,38 @@ export default class Documents extends Vue{
 
    private filter(data: Doc[]): Doc[] {
       
-      if (this.searchInput) {  
-         const searchArguments = this.searchInput.split(';')
-         let filterByDate: Doc[] = []
-         let filterbyNumber: Doc[] = []
-         let filterByString: Doc[] = []
-         const filterSUM: Doc[] = []
-         searchArguments?.forEach(arg => {
-            if (arg === '') return
-            if (this.checkDate(arg) === true) {
-               filterByDate = data.filter((doc: Doc) => {
-                  return moment(doc.date).format("DD.MM.YYYY").toString() === arg 
-               })
-            }
-            if (this.checkNumber(arg)) {
-               const argAsNum = arg.replace(/,(\d+)$/,'.$1')
-               filterbyNumber = data.filter((doc: Doc) => {
-                  return Math.abs(doc.amount) === Number(argAsNum)
-               })
-            }
-            filterByString = data.filter((doc: Doc) => {
-               return doc.name.toLowerCase().includes(arg) || doc.description.toLowerCase().includes(arg) || doc.iban.toLowerCase().includes(arg)
-            })
-            filterSUM.push(... filterByString, ... filterByDate, ... filterbyNumber)
-         })
-         return filterSUM
-      }else {
+      if (!this.searchInput){
          return data
       }
-   }
 
-  
+      const searchArguments = this.searchInput.split(';')
+      let filterByDate: Doc[] = []
+      let filterbyNumber: Doc[] = []
+      let filterByString: Doc[] = []
+      const filterSUM: Doc[] = []
+
+      searchArguments?.forEach(arg => {
+         if (arg === '') return
+         if (this.checkDate(arg) === true) {
+            filterByDate = data.filter((doc: Doc) => {
+               return moment(doc.date).format("DD.MM.YYYY").toString() === arg 
+            })
+         }
+         if (this.checkNumber(arg)) {
+            const argAsNum = arg.replace(/,(\d+)$/,'.$1')
+            filterbyNumber = data.filter((doc: Doc) => {
+               return Math.abs(doc.amount) === Number(argAsNum)
+            })
+         }
+         filterByString = data.filter((doc: Doc) => {
+            return doc.name.toLowerCase().includes(arg) || doc.description.toLowerCase().includes(arg) || doc.iban.toLowerCase().includes(arg)
+         })
+         filterSUM.push(... filterByString, ... filterByDate, ... filterbyNumber)
+      })
+
+      return filterSUM
+    
+   }
 
    @Watch("searchInput")
    preventNull() {
@@ -235,6 +237,7 @@ export default class Documents extends Vue{
       return moment(possibelDate, 'DD.MM.YYYY').isValid()
    }
 
+   // eslint-disable-next-line
    private checkNumber(possibleNumber: any): boolean {
       const argAsNum = possibleNumber.replace(/,(\d+)$/,'.$1')
       return !isNaN(argAsNum)
