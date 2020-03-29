@@ -1,5 +1,8 @@
 <template>
    <div class="py-1 px-1">
+      <h1 style="margin: 10px;">
+         Einstellungen
+      </h1>
       <v-card
          class="card"
          to="/accounts"
@@ -21,6 +24,18 @@
          </v-card-title>
          <v-card-text>
             Kategorien zu Bankkonten anlegen
+         </v-card-text>
+      </v-card>
+
+      <v-card
+         class="card"
+         to="/categories"
+      >
+         <v-card-title>
+            Regeln
+         </v-card-title>
+         <v-card-text>
+            Lege Regeln an, um Kategorien automatisiert zu zuweisen.
          </v-card-text>
       </v-card>
 
