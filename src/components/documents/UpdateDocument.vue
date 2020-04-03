@@ -55,6 +55,7 @@
                   outlined
                   solo
                   label="Kategorie"
+                  @keyup.enter="setFocusToSave()"
                />
             </v-row>
          </v-card-text>
@@ -68,6 +69,7 @@
                tile
                @click.native="save()"
                class="px-0 primary"
+               id="saveButton"
             >speichern</v-btn>
          </v-card-actions>
          </v-card>
@@ -121,7 +123,10 @@ export default class UpdateDocument extends Vue{
 
    async fetchCategories(account: number){
       const res = await this.axios.get(`/categories`)
-      this.categories = res.data.filter((cat: Category) => cat.account === account)
+      const unsortedData = res.data.filter((cat: Category) => cat.account === account)
+      this.categories = unsortedData.sort((a: Category, b: Category) => { 
+        return a.title.localeCompare(b.title)
+       })
    }
 
    async save() {
@@ -130,6 +135,14 @@ export default class UpdateDocument extends Vue{
          this.$emit('updateGrid', true)
       }
       this.closeDialog()
+   }
+
+   private setFocusToSave() {
+      if (document !== null) {
+         // eslint-disable-next-line 
+         document.getElementById('saveButton').focus()
+      }
+      
    }
 
    async updateDB() {

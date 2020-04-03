@@ -6,7 +6,10 @@
          <AccountSummary 
             :account="account"
          />
-         <v-card-subtitle class="my-0 py-0">
+         <v-card-subtitle class="my-0 py-0"
+            id="search"
+         
+         >
             <v-text-field
                v-model="searchInput"
                dense
@@ -114,8 +117,8 @@ export default class Documents extends Vue{
    private documents: Array<Doc> = [];
    private openingBalance = 0
    private period = {
-      from: moment().startOf('month').format("YYYY-MM-DD"),
-      to: moment().endOf('month').format("YYYY-MM-DD")
+      from: moment().subtract(30, "days").format("YYYY-MM-DD"),
+      to: moment().format("YYYY-MM-DD")
    }
 
    // Update dialog 
@@ -140,8 +143,11 @@ export default class Documents extends Vue{
    }
 
    async fetchMoreDocuments() {
-      this.period.from = moment(this.period.from).subtract(1, "month").format("YYYY-MM-DD")
-      await this.fetchDocuments(this.selectedAccount)
+      this.period.from = moment(this.period.from).subtract(20, "days").format("YYYY-MM-DD")
+      await Promise.all([
+         this.fetchDocuments(this.selectedAccount),
+         this.fetchOpeningBalance(this.selectedAccount)
+      ])
    }
 
    async fetchAccount(account: number){
@@ -200,31 +206,39 @@ export default class Documents extends Vue{
       }
 
       const searchArguments = this.searchInput.split(';')
-      let filterByDate: Doc[] = []
-      let filterbyNumber: Doc[] = []
-      let filterByString: Doc[] = []
-      const filterSUM: Doc[] = []
+      const filter: Doc[] = []
 
       searchArguments?.forEach(arg => {
          if (arg === '') return
+
+
          if (this.checkDate(arg) === true) {
-            filterByDate = data.filter((doc: Doc) => {
-               return moment(doc.date).format("DD.MM.YYYY").toString() === arg 
-            })
+         filter.push(... data.filter((doc: Doc) => {
+               return moment(doc.date).format("DD.MM.YYYY").toString() === arg && filter.indexOf(doc) === -1
+            }))
          }
+         
          if (this.checkNumber(arg)) {
             const argAsNum = arg.replace(/,(\d+)$/,'.$1')
-            filterbyNumber = data.filter((doc: Doc) => {
-               return Math.abs(doc.amount) === Number(argAsNum)
-            })
+            filter.push(... data.filter((doc: Doc) => {
+               return Math.abs(doc.amount) === Number(argAsNum) && filter.indexOf(doc) === -1
+            }))
          }
-         filterByString = data.filter((doc: Doc) => {
-            return doc.name.toLowerCase().includes(arg) || doc.description.toLowerCase().includes(arg) || doc.iban.toLowerCase().includes(arg)
-         })
-         filterSUM.push(... filterByString, ... filterByDate, ... filterbyNumber)
+
+         filter.push(... data.filter((doc: Doc) => {
+            return (doc.name.toLowerCase().includes(arg) && filter.indexOf(doc) === -1 )
+         }))
+
+         filter.push(... data.filter((doc: Doc) => {
+            return (doc.description.toLowerCase().includes(arg) && filter.indexOf(doc) === -1 )
+         }))
+
+         filter.push(... data.filter((doc: Doc) => {
+            return ( doc.iban.toLowerCase().includes(arg) && filter.indexOf(doc) === -1 )
+         }))
       })
 
-      return filterSUM
+      return filter
     
    }
 
@@ -247,6 +261,16 @@ export default class Documents extends Vue{
       return moment(date).format("DD.MM.YYYY")
    }
 
+
+   // private checkSticky() {
+   //    const searchBar = document.getElementById("search")
+   //    const sticky = searchBar?.offsetTop
+   //    if (window.pageYOffset >= sticky!) {
+   //       searchBar?.classList.add("sticky")
+   //    } else {
+   //       searchBar?.classList.remove("sticky");
+   //    }
+   // }
 }
 </script>
 
@@ -254,4 +278,13 @@ export default class Documents extends Vue{
    .card {
       margin: 5px;
    }
+
+   /* .sticky {
+      position: fixed;
+      top: 0;
+      z-index: auto;
+      width: 100%;
+      margin-right: 5px;
+      background-color: white;
+   } */
 </style>

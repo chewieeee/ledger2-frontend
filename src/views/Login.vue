@@ -55,7 +55,7 @@ export default class Login extends Vue{
       const res = await this.axios.post(`/login`, credentials)
       if (res.status === 201) {
          this.saveTokenAsCookie(res.data)
-         this.$router.replace(fullPath)
+         this.$router.push('/')
       }else{
          console.log("nö"); 
       }
