@@ -21,21 +21,18 @@
                placeholder="neue Kategorie"
                @keyup.enter="createCategory()"
             />
-            <v-list>
-               <v-list-item
+
+               <v-chip
+                  primary
+                  label
+                  close
                   v-for="category in categorySelection"
                   :key="category.id" 
+                  @click:close="deleteCategory(category.id)"
+                  class="mx-1 my-1"
                >
-                  <v-chip
-                     primary
-                     label
-                     close
-                     @click:close="deleteCategory(category.id)"
-                  >
-                     {{ category.title }}
-                  </v-chip>
-               </v-list-item>
-            </v-list>
+                  {{ category.title }}
+               </v-chip>
          </v-card-text>
       </v-card>
    </div>
@@ -66,7 +63,10 @@ export default class Categories extends Vue{
 
    async fetchCategories() {
       const res = await this.axios.get('/categories')
-      this.categories = res.data
+      const unsortedData = res.data.sort() as Category[]
+      this.categories = unsortedData.sort((a, b) => { 
+        return a.title.localeCompare(b.title)
+       })
    }
 
    async createCategory() {
