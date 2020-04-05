@@ -7,11 +7,40 @@
    >
 <v-navigation-drawer permanent app>
       <v-list>
-         <v-list-item>test</v-list-item>
+         <v-list-item link
+            to="/"
+         >
+            <v-list-item-action>
+               <v-icon>mdi-bank</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+               <v-list-item-title>Konten</v-list-item-title>
+            </v-list-item-content>
+         </v-list-item>
+         <v-list-item link
+            to="/reports"
+         >
+            <v-list-item-action>
+               <v-icon>mdi-format-list-bulleted-type</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+               <v-list-item-title>Reports</v-list-item-title>
+            </v-list-item-content>
+         </v-list-item>
+         <v-list-item link
+            to="/settings"
+         >
+            <v-list-item-action>
+               <v-icon>mdi-cog-outline</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+               <v-list-item-title>Settings</v-list-item-title>
+            </v-list-item-content>
+         </v-list-item>
       </v-list>
    </v-navigation-drawer>
    </v-card>
-
+<!-- 
     <v-app-bar
       app
       color="primary"
@@ -22,7 +51,7 @@
       <v-toolbar-title>
          {{ navbartitle }}
       </v-toolbar-title>
-   </v-app-bar>
+   </v-app-bar> -->
 
 </div>
 </template>

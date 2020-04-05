@@ -1,6 +1,10 @@
 <template>
-   <v-card>
-      <v-card-title>
+   <v-card
+      class="card"
+   >
+      <v-card-title
+         class="cardHeader"
+      >
          {{ account.title }}
       </v-card-title>
       <v-card-text>

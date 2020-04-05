@@ -8,7 +8,6 @@
          />
          <v-card-subtitle
             id="search"
-
          >
             <v-text-field
                v-model="searchInput"
@@ -18,8 +17,7 @@
                solo
                placeholder="Suche..."
                clearable
-            >
-         </v-text-field>
+            />
          </v-card-subtitle>
          <v-divider />
          <v-row>
@@ -58,20 +56,26 @@
                </v-list>
             </v-col>
          </v-row>
-         <v-row>
-            <v-col
-            :cols="4"
-            class="py-1"
-            >
-               Saldovortrag
-            </v-col>
-            <v-col
-               class="text-right"
-               :cols="8"
-            >
-               {{ new Intl.NumberFormat("de-DE", format).format(openingBalance) }}
-            </v-col>
-         </v-row>
+         <v-card-text
+            class="openingBalance"
+         >
+            <v-row>
+               <v-col
+                  :cols="8"
+               >
+                  Saldovortrag
+               </v-col>
+               <v-col
+                  :cols="4"
+                  class="text-right"
+               >
+                  {{
+                     new Intl.NumberFormat("de-DE", format).format(openingBalance)
+                  }}
+               </v-col>
+            </v-row>
+         </v-card-text>
+
          <v-card-actions>
             <v-btn
                block
@@ -260,31 +264,13 @@ export default class Documents extends Vue{
    private formatedDate(date: Date): string {
       return moment(date).format("DD.MM.YYYY")
    }
-
-
-   // private checkSticky() {
-   //    const searchBar = document.getElementById("search")
-   //    const sticky = searchBar?.offsetTop
-   //    if (window.pageYOffset >= sticky!) {
-   //       searchBar?.classList.add("sticky")
-   //    } else {
-   //       searchBar?.classList.remove("sticky");
-   //    }
-   // }
 }
 </script>
 
 <style scoped>
-   .card {
-      margin: 10px;
+   .openingBalance{
+      padding-top: 0px;
+      padding-bottom: 0px;
+      font-size: 16px;
    }
-
-   /* .sticky {
-      position: fixed;
-      top: 0;
-      z-index: auto;
-      width: 100%;
-      margin-right: 5px;
-      background-color: white;
-   } */
 </style>

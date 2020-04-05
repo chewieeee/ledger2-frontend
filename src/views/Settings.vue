@@ -10,7 +10,9 @@
             class="card"
             to="/accounts"
          >
-            <v-card-title>
+            <v-card-title
+               class="cardHeader"
+            >
                Konten
             </v-card-title>
             <v-card-text>
@@ -22,7 +24,9 @@
             class="card"
             to="/categories"
          >
-            <v-card-title>
+            <v-card-title
+               class="cardHeader"
+            >
                Kategorien
             </v-card-title>
             <v-card-text>
@@ -34,7 +38,9 @@
             class="card"
             to="/categories"
          >
-            <v-card-title>
+            <v-card-title
+               class="cardHeader"
+            >
                Regeln
             </v-card-title>
             <v-card-text>
@@ -46,7 +52,9 @@
             class="card"
             to="/budgets"
          >
-            <v-card-title>
+            <v-card-title
+               class="cardHeader"
+            >
                Budgets
             </v-card-title>
             <v-card-text>
@@ -71,7 +79,7 @@ export default class Settings extends Vue{
 }
 </script>
 
-
 <style>
+
 
 </style>

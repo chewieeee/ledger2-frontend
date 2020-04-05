@@ -68,6 +68,7 @@ export default class App extends Vue {
    -moz-osx-font-smoothing: grayscale;
    color: #2c3e50;
    background-color: #e5e8eb25;
+   margin-bottom: 60px;
 }
    #content {
       padding-top: 5px !important;
@@ -87,7 +88,6 @@ export default class App extends Vue {
       -moz-osx-font-smoothing: grayscale;
       background-color: #e5e8eb25;
       color: #2c3e50;
-      margin-top: 48px;
     }
 
    #content {
@@ -103,6 +103,19 @@ export default class App extends Vue {
 }
 
 #mainObject {
-   margin: 10px;
+   margin-top: 10px;
+   margin-left: 10px;
+   margin-right: 10px;
+   margin-bottom: 10px !important;
 }
+
+   .cardHeader {
+      padding-top: 5px !important;
+      padding-bottom: 5px !important;
+      margin-bottom: 0px !important;
+   }
+
+   .card {
+      margin-bottom: 10px;
+   }
 </style>
