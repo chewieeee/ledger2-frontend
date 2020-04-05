@@ -3,12 +3,12 @@
     <h1 style="margin-left: 10px;" class="font-weight-thin">
       Übersicht
     </h1>
-    <AccountCard 
-      v-for="account in accounts" 
+    <AccountCard
+      v-for="account in accounts"
       :key="account.id"
       sm="12"
       :account="account"
-      class="accCard"
+      id="mainObject"
       @click.native="openAccount(account.id)"
     />
   </div>
@@ -30,7 +30,7 @@ export default class Dashboard extends Vue{
   private accounts: Account[] = []
 
   async beforeMount() {
-    await this.fetchAccounts() 
+    await this.fetchAccounts()
   }
 
   async fetchAccounts() {
@@ -45,7 +45,4 @@ export default class Dashboard extends Vue{
 </script>
 
 <style >
-    .accCard{ 
-      margin: 10px;
-    }
 </style>

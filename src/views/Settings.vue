@@ -1,55 +1,60 @@
 <template>
-   <div class="py-1 px-1">
-      <h1 style="margin: 10px;">
+   <div>
+      <h1 style="margin-left: 10px;" class="font-weight-thin">
          Einstellungen
       </h1>
-      <v-card
-         class="card"
-         to="/accounts"
+      <div
+         id="mainObject"
       >
-         <v-card-title>
-            Konten
-         </v-card-title>
-         <v-card-text>
-            Bankkonten sowie entsprechende Zugangsdaten anlegen
-         </v-card-text>
-      </v-card>
+         <v-card
+            class="card"
+            to="/accounts"
+         >
+            <v-card-title>
+               Konten
+            </v-card-title>
+            <v-card-text>
+               Bankkonten sowie entsprechende Zugangsdaten anlegen
+            </v-card-text>
+         </v-card>
 
-      <v-card
-         class="card"
-         to="/categories"
-      >
-         <v-card-title>
-            Kategorien
-         </v-card-title>
-         <v-card-text>
-            Kategorien zu Bankkonten anlegen
-         </v-card-text>
-      </v-card>
+         <v-card
+            class="card"
+            to="/categories"
+         >
+            <v-card-title>
+               Kategorien
+            </v-card-title>
+            <v-card-text>
+               Kategorien zu Bankkonten anlegen
+            </v-card-text>
+         </v-card>
 
-      <v-card
-         class="card"
-         to="/categories"
-      >
-         <v-card-title>
-            Regeln
-         </v-card-title>
-         <v-card-text>
-            Lege Regeln an, um Kategorien automatisiert zu zuweisen.
-         </v-card-text>
-      </v-card>
+         <v-card
+            class="card"
+            to="/categories"
+         >
+            <v-card-title>
+               Regeln
+            </v-card-title>
+            <v-card-text>
+               Lege Regeln an, um Kategorien automatisiert zu zuweisen.
+            </v-card-text>
+         </v-card>
 
-      <v-card
-         class="card"
-         to="/budgets"
-      >
-         <v-card-title>
-            Budgets
-         </v-card-title>
-         <v-card-text>
-            Budgets anlegen sowie Kategorien zu Budgets zuordnen
-         </v-card-text>
-      </v-card>
+         <v-card
+            class="card"
+            to="/budgets"
+         >
+            <v-card-title>
+               Budgets
+            </v-card-title>
+            <v-card-text>
+               Budgets anlegen sowie Kategorien zu Budgets zuordnen
+            </v-card-text>
+         </v-card>
+      </div>
+
    </div>
 </template>
 
@@ -68,7 +73,5 @@ export default class Settings extends Vue{
 
 
 <style>
-   .card{
-      margin: 15px;
-   }
+
 </style>

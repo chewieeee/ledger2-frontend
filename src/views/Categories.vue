@@ -1,9 +1,13 @@
 <template>
-   <div style="margin: 10px;">
-      <h1 >Kategorien</h1>
-      <v-card>
+   <div>
+      <h1 style="margin-left: 10px;" class="font-weight-thin">
+         Kategorien
+      </h1>
+      <v-card
+         id="mainObject"
+      >
          <v-card-title>
-            <v-select 
+            <v-select
                v-model="selectedAccount"
                :items="accounts"
                item-value="id"
@@ -27,7 +31,7 @@
                   label
                   close
                   v-for="category in categorySelection"
-                  :key="category.id" 
+                  :key="category.id"
                   @click:close="deleteCategory(category.id)"
                   class="mx-1 my-1"
                >
@@ -43,7 +47,7 @@ import { Vue, Component } from 'vue-property-decorator'
 
 @Component
 export default class Categories extends Vue{
-   
+
    private accounts: BankAccount[] = []
    private categories: Category[] = []
    private selectedAccount = 0;
@@ -53,7 +57,7 @@ export default class Categories extends Vue{
       Promise.all([
          this.fetchAccounts(),
          this.fetchCategories()
-      ])  
+      ])
    }
 
    async fetchAccounts() {
@@ -64,7 +68,7 @@ export default class Categories extends Vue{
    async fetchCategories() {
       const res = await this.axios.get('/categories')
       const unsortedData = res.data.sort() as Category[]
-      this.categories = unsortedData.sort((a, b) => { 
+      this.categories = unsortedData.sort((a, b) => {
         return a.title.localeCompare(b.title)
        })
    }
@@ -80,6 +84,9 @@ export default class Categories extends Vue{
          console.log(res)
          newCategory.id = res.data.insertId
          this.categories.push(newCategory as Category)
+         this.categories.sort((a, b) => {
+            return a.title.localeCompare(b.title)
+         })
          this.newCategoryTitle = ''
       }
    }

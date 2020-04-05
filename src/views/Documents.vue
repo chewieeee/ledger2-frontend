@@ -1,14 +1,14 @@
 <template>
-   <div class="pa-2">
+   <div>
       <v-card
-         class="card"
+         id="mainObject"
       >
-         <AccountSummary 
+         <AccountSummary
             :account="account"
          />
-         <v-card-subtitle class="my-0 py-0"
+         <v-card-subtitle
             id="search"
-         
+
          >
             <v-text-field
                v-model="searchInput"
@@ -23,9 +23,9 @@
          </v-card-subtitle>
          <v-divider />
          <v-row>
-            <v-col 
+            <v-col
                :cols="12"
-               v-for="section in documentGrid" 
+               v-for="section in documentGrid"
                :key="section.date"
                class="py-1"
             >
@@ -39,16 +39,16 @@
                         {{ formatedDate(section.date) }}
                      </v-col>
                      <v-col class="text-right py-0">
-                        {{ 
-                           new Intl.NumberFormat("de-DE", format).format(section.balance) 
-                        }} 
+                        {{
+                           new Intl.NumberFormat("de-DE", format).format(section.balance)
+                        }}
                      </v-col>
                   </v-row>
                </v-card-subtitle>
                <v-list
                   class="py-1"
                >
-                  <DocItem 
+                  <DocItem
                      v-for="doc in section.documents"
                      :key="doc.id"
                      :doc="doc"
@@ -69,7 +69,7 @@
                class="text-right"
                :cols="8"
             >
-               {{ new Intl.NumberFormat("de-DE", format).format(openingBalance) }} 
+               {{ new Intl.NumberFormat("de-DE", format).format(openingBalance) }}
             </v-col>
          </v-row>
          <v-card-actions>
@@ -77,7 +77,7 @@
                block
                depressed
                @click.native="fetchMoreDocuments()"
-            > 
+            >
                mehr Umsätze
             </v-btn>
          </v-card-actions>
@@ -107,7 +107,7 @@ import moment from 'moment'
 export default class Documents extends Vue{
 
    // define format for numbers
-   private format = numberFormat;  
+   private format = numberFormat;
 
    // Account Summary
    private account: Account = {} as Account
@@ -117,11 +117,11 @@ export default class Documents extends Vue{
    private documents: Array<Doc> = [];
    private openingBalance = 0
    private period = {
-      from: moment().subtract(30, "days").format("YYYY-MM-DD"),
-      to: moment().format("YYYY-MM-DD")
+      from: moment().startOf("month").subtract(1, "month").format("YYYY-MM-DD"),
+      to: moment().endOf("month").format("YYYY-MM-DD")
    }
 
-   // Update dialog 
+   // Update dialog
    private selectedDoc: Doc = {} as Doc
    private dialog = false;
 
@@ -143,7 +143,7 @@ export default class Documents extends Vue{
    }
 
    async fetchMoreDocuments() {
-      this.period.from = moment(this.period.from).subtract(20, "days").format("YYYY-MM-DD")
+      this.period.from = moment(this.period.from).subtract(1, "month").format("YYYY-MM-DD")
       await Promise.all([
          this.fetchDocuments(this.selectedAccount),
          this.fetchOpeningBalance(this.selectedAccount)
@@ -184,7 +184,7 @@ export default class Documents extends Vue{
       dates = dates.sort((a, b) => {
          return new Date(a).getTime() - new Date(b).getTime()
       })
-      
+
       dates.forEach( date => {
          const obj = {
             date: date,
@@ -200,7 +200,7 @@ export default class Documents extends Vue{
    }
 
    private filter(data: Doc[]): Doc[] {
-      
+
       if (!this.searchInput){
          return data
       }
@@ -217,7 +217,7 @@ export default class Documents extends Vue{
                return moment(doc.date).format("DD.MM.YYYY").toString() === arg && filter.indexOf(doc) === -1
             }))
          }
-         
+
          if (this.checkNumber(arg)) {
             const argAsNum = arg.replace(/,(\d+)$/,'.$1')
             filter.push(... data.filter((doc: Doc) => {
@@ -239,7 +239,7 @@ export default class Documents extends Vue{
       })
 
       return filter
-    
+
    }
 
    @Watch("searchInput")
@@ -276,7 +276,7 @@ export default class Documents extends Vue{
 
 <style scoped>
    .card {
-      margin: 5px;
+      margin: 10px;
    }
 
    /* .sticky {

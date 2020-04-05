@@ -1,9 +1,9 @@
 <template>
-   <v-list-item 
+   <v-list-item
       class="docItem"
    >
       <v-list-item-content
-         class="py-1"
+         
       >
          <v-list-item-title>
             <v-row
@@ -17,8 +17,8 @@
                      {{ doc.name }}
                   </div>
                   <div>
-                     <v-chip 
-                        x-small 
+                     <v-chip
+                        x-small
                         label
                         v-show="doc.category !==  null"
                      >
@@ -27,12 +27,12 @@
 
                   </div>
                </v-col>
-               <v-col 
+               <v-col
                   class="text-right py-1"
                   :cols="4"
                >
-                  {{ 
-                     new Intl.NumberFormat("de-DE", format).format(doc.amount) 
+                  {{
+                     new Intl.NumberFormat("de-DE", format).format(doc.amount)
                   }}
                </v-col>
             </v-row>
