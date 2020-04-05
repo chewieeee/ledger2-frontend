@@ -105,7 +105,4 @@ export default class App extends Vue {
 #mainObject {
    margin: 10px;
 }
-
-
-
 </style>
