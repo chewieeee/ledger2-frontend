@@ -1,66 +1,27 @@
 <template>
    <div>
-      <h1 style="margin-left: 10px;" class="font-weight-thin">
+      <h1>
          Einstellungen
       </h1>
       <div
          id="mainObject"
       >
          <v-card
+            v-for="item in settings"
+            :key="item.id"
+            :to="item.path"
             class="card"
-            to="/accounts"
          >
             <v-card-title
                class="cardHeader"
             >
-               Konten
+               {{ item.name }}
             </v-card-title>
             <v-card-text>
-               Bankkonten sowie entsprechende Zugangsdaten anlegen
+               {{ item.text }}
             </v-card-text>
          </v-card>
 
-         <v-card
-            class="card"
-            to="/categories"
-         >
-            <v-card-title
-               class="cardHeader"
-            >
-               Kategorien
-            </v-card-title>
-            <v-card-text>
-               Kategorien zu Bankkonten anlegen
-            </v-card-text>
-         </v-card>
-
-         <v-card
-            class="card"
-            to="/categories"
-         >
-            <v-card-title
-               class="cardHeader"
-            >
-               Regeln
-            </v-card-title>
-            <v-card-text>
-               Lege Regeln an, um Kategorien automatisiert zu zuweisen.
-            </v-card-text>
-         </v-card>
-
-         <v-card
-            class="card"
-            to="/budgets"
-         >
-            <v-card-title
-               class="cardHeader"
-            >
-               Budgets
-            </v-card-title>
-            <v-card-text>
-               Budgets anlegen sowie Kategorien zu Budgets zuordnen
-            </v-card-text>
-         </v-card>
       </div>
 
    </div>
@@ -72,9 +33,11 @@ import { Vue, Component, Watch } from 'vue-property-decorator'
 @Component
 export default class Settings extends Vue{
    private settings = [
-      { id: "1", name: "Konten", path: "/accounts" },
-      { id: "2", name: "Kategorien", path: "/categories" },
-      { id: "3", name: "Budgets", path: "/budgets" }
+      { id: "1", name: "Konten", text: "Konten anlegen und ändern", path: "/accounts" },
+      { id: "2", name: "Kategorien", text: "Kategorien zu einem Konto anlegen", path: "/categories" },
+      { id: "3", name: "Budgets", text: "Budgets anlegen und Kategorien zuordnen", path: "/budgets" },
+      { id: "4", name: "Regeln", text: "Regeln anlegen, um Kategorien automatisch zu Buchungen zu zuordnen", path: "/rules" },
+      { id: "5", name: "Zugänge", text: "Zugänge anlegen und ändern", path: "/users" }
    ]
 }
 </script>
