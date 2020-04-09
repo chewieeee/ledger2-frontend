@@ -1,8 +1,8 @@
 <template>
-      <Dialog 
+      <Dialog
          :dialog="dialog"
          @clickedOutside="closeDialog"
-      > 
+      >
          <v-card
             rounded
             max-width="500"
@@ -18,7 +18,7 @@
          </v-card-title>
          <v-divider></v-divider>
          <v-card-text
-            class="py-0"   
+            class="py-0"
          >
             <v-row>
                <v-col
@@ -62,7 +62,7 @@
          <v-card-actions
             class="py-0 px-0"
          >
-            <v-btn 
+            <v-btn
                block
                bottom
                elevation="0"
@@ -124,7 +124,7 @@ export default class UpdateDocument extends Vue{
    async fetchCategories(account: number){
       const res = await this.axios.get(`/categories`)
       const unsortedData = res.data.filter((cat: Category) => cat.account === account)
-      this.categories = unsortedData.sort((a: Category, b: Category) => { 
+      this.categories = unsortedData.sort((a: Category, b: Category) => {
         return a.title.localeCompare(b.title)
        })
    }
@@ -138,11 +138,8 @@ export default class UpdateDocument extends Vue{
    }
 
    private setFocusToSave() {
-      if (document !== null) {
-         // eslint-disable-next-line 
-         document.getElementById('saveButton').focus()
-      }
-      
+      const el = document.getElementById("saveButton")!
+      el.focus()
    }
 
    async updateDB() {
@@ -154,7 +151,7 @@ export default class UpdateDocument extends Vue{
    }
 
    get formatedDate() {
-      return (this.doc) ? moment(this.doc.date).format("DD.MM.YYYY") : "" 
+      return (this.doc) ? moment(this.doc.date).format("DD.MM.YYYY") : ""
    }
 }
 </script>

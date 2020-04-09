@@ -118,4 +118,9 @@ export default class App extends Vue {
    .card {
       margin-bottom: 10px;
    }
+
+   h1 {
+      margin-left: 10px;
+      font-weight: 100 !important;
+   }
 </style>

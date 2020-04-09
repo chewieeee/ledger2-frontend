@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 style="margin-left: 10px;" class="font-weight-thin">
+    <h1>
       Übersicht
     </h1>
     <AccountCard

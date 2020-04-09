@@ -215,7 +215,6 @@ export default class Documents extends Vue{
       searchArguments?.forEach(arg => {
          if (arg === '') return
 
-
          if (this.checkDate(arg) === true) {
          filter.push(... data.filter((doc: Doc) => {
                return moment(doc.date).format("DD.MM.YYYY").toString() === arg && filter.indexOf(doc) === -1
@@ -230,15 +229,14 @@ export default class Documents extends Vue{
          }
 
          filter.push(... data.filter((doc: Doc) => {
-            return (doc.name.toLowerCase().includes(arg) && filter.indexOf(doc) === -1 )
-         }))
-
-         filter.push(... data.filter((doc: Doc) => {
-            return (doc.description.toLowerCase().includes(arg) && filter.indexOf(doc) === -1 )
-         }))
-
-         filter.push(... data.filter((doc: Doc) => {
-            return ( doc.iban.toLowerCase().includes(arg) && filter.indexOf(doc) === -1 )
+            return (
+               (
+                  doc.name.toLowerCase().includes(arg.toLowerCase()) ||
+                  doc.description.toLowerCase().includes(arg.toLowerCase()) ||
+                  doc.category?.toLowerCase().includes(arg.toLowerCase()) ||
+                  doc.iban.toLowerCase().includes(arg.toLowerCase())
+               )
+            && filter.indexOf(doc) === -1 )
          }))
       })
 
