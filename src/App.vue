@@ -42,19 +42,6 @@ export default class App extends Vue {
     return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   }
 
-  mounted() {
-    this.setTokenInHeader()
- }
-
-  setTokenInHeader() {
-    const token = this.$cookies.get('token')
-    if (token === null) {
-      this.$router.replace('/login')
-    }else{
-      this.axios.defaults.headers.common['x-token'] = token
-    }
-  }
-}
 </script>
 
 <style >
