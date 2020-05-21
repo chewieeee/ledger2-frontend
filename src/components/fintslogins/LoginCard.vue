@@ -36,6 +36,8 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import moment from 'moment'
 import 'moment/locale/de'
 
+moment.locale('de')
+
 @Component
 export default class LoginCard extends Vue{
 
@@ -45,11 +47,11 @@ export default class LoginCard extends Vue{
    login!: FintsLogin
 
    get validFrom() {
-      return (this.login.validFrom)
+      return (this.login.validFrom) ? moment(this.login.validFrom).format('DD.MM.YYYY') : this.unlimited
    }
 
    get validTo() {
-      return (this.login.validTo) 
+      return (this.login.validTo) ? moment(this.login.validTo).format('DD.MM.YYYY') : this.unlimited
    }
 }
 </script>
