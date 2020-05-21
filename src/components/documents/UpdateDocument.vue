@@ -1,84 +1,115 @@
 <template>
       <Dialog
          :dialog="dialog"
+         :fullscreen="false"
          @clickedOutside="closeDialog"
       >
          <v-card
             rounded
             max-width="500"
-            class="py-0"
          >
-         <v-card-title
-            class="name"
-         >
-            <h5>
-               {{ doc.name }}
-            </h5>
-
-         </v-card-title>
-         <v-divider></v-divider>
-         <v-card-text
-            class="py-0"
-         >
-            <v-row>
-               <v-col
-                  col="3"
+            <v-card-title
+               class="name"
+            >
+               <h5>
+                  {{ doc.name }}
+               </h5>
+               <v-spacer />
+               <v-icon text
+                  @click.native="closeDialog()"
                >
-                  {{ formatedDate }}
-               </v-col>
-               <v-col
-                  col="9"
-                  class="text-right"
-               >
-                  {{ new Intl.NumberFormat("de-DE", format).format(doc.amount) }}
-               </v-col>
-            </v-row>
-            <v-row v-if="doc.iban !== 'null'">
-               <v-col col="12">
-                   <strong>IBAN:</strong> {{ doc.iban }}
-               </v-col>
-            </v-row>
-            <v-row>
-               <v-col>
-                  <strong>Verwendungszweck:</strong><br>
-                  {{ doc.description }}
-               </v-col>
-            </v-row>
-            <v-row>
-               <v-autocomplete
-                  v-model="asignedCategory"
-                  :items="categories"
-                  item-text="title"
-                  item-value="id"
-                  dense
-                  flat
-                  outlined
-                  solo
-                  label="Kategorie"
-                  @keyup.enter="setFocusToSave()"
-               />
-            </v-row>
-         </v-card-text>
-         <v-card-actions
-            class="py-0 px-0"
-         >
-            <v-btn
-               block
-               bottom
-               elevation="0"
-               tile
-               @click.native="save()"
-               class="px-0 primary"
-               id="saveButton"
-            >speichern</v-btn>
-         </v-card-actions>
+                  mdi-close
+               </v-icon>
+            </v-card-title>
+            <v-divider></v-divider>
+            <v-card-text
+            >
+               <v-row>
+                  <v-col
+                     col="3"
+                  >
+                     {{ formatedDate }}
+                  </v-col>
+                  <v-col
+                     col="9"
+                     class="text-right"
+                  >
+                     {{ new Intl.NumberFormat("de-DE", format).format(doc.amount) }}
+                  </v-col>
+               </v-row>
+               <v-row v-if="doc.iban !== 'null'">
+                  <v-col col="12">
+                     <strong>IBAN:</strong> {{ doc.iban }}
+                  </v-col>
+               </v-row>
+               <v-row>
+                  <v-col>
+                     <strong>Verwendungszweck:</strong><br>
+                     {{ doc.description }}
+                  </v-col>
+               </v-row>
+               <v-row>
+                  <v-col
+                     class="py-0"
+                  >
+                     <v-autocomplete
+                        v-model="asignedCategory"
+                        :items="categories"
+                        item-text="title"
+                        item-value="id"
+                        dense
+                        flat
+                        outlined
+                        solo
+                        label="Kategorie"
+                        :allow-overflow=true
+                        :autofocus=false
+                        no-data-text="keine Kategorie gefunden"
+                        @keyup.enter="setFocusToSave()"
+                     />
+                  </v-col>
+               </v-row>
+               <v-row>
+                  <v-col
+                     cols="12"
+                     sm="12"
+                     class="dialogButton"
+                  >
+                     <v-btn
+                        block
+                        bottom
+                        outlined
+                        color="blue"
+                        @click.native="save()"
+                        id="saveButton"
+                     >
+                        speichern
+                     </v-btn>
+                  </v-col>
+                  <v-col
+                     cols="12"
+                     sm="12"
+                     class="dialogButton"
+                  >
+                     <v-btn
+                        block
+                        bottom
+                        outlined
+                        color="red"
+                        @click.native="closeDialog()"
+                     >
+                        abbrechen
+                     </v-btn>
+                  </v-col>
+               </v-row>
+            </v-card-text>
          </v-card>
       </Dialog>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Watch, Prop } from 'vue-property-decorator';
-import Dialog from '@/components/dialogs/Dialog.vue'
+import Dialog from '@/components/generic/dialogs/Dialog.vue'
 import { numberFormat } from '../../shared/document';
 import moment from 'moment';
 
@@ -156,7 +187,19 @@ export default class UpdateDocument extends Vue{
 }
 </script>
 
-<style  scoped>
+<style>
+
+   @media only screen and (max-device-width : 500px) {
+      .dialogButton {
+         padding-top: 0px !important;
+      }
+   }
+   @media only screen and (min-device-width : 501px) {
+      .dialogButton {
+         padding-top: 0px !important;
+      }
+   }
+
    .name {
       overflow-wrap: break-word;
       word-wrap: break-word;

@@ -51,7 +51,6 @@ export default class App extends Vue {
     if (token === null) {
       this.$router.replace('/login')
     }else{
-      console.log(token);
       this.axios.defaults.headers.common['x-token'] = token
     }
   }

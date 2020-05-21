@@ -18,7 +18,7 @@
 // @ is an alias to /src
 
 import { Vue, Component } from 'vue-property-decorator'
-import AccountCard from '@/components/dashboard/AccountCard.vue'
+import AccountCard from '@/components/bankaccounts/AccountCard.vue'
 
 @Component({
   components: {

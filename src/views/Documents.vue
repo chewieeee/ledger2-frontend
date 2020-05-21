@@ -3,89 +3,144 @@
       <v-card
          id="mainObject"
       >
-         <AccountSummary
-            :account="account"
-         />
-         <v-card-subtitle
-            id="search"
-         >
-            <v-text-field
-               v-model="searchInput"
-               dense
-               outlined
-               flat
-               solo
-               placeholder="Suche..."
-               clearable
+            <AccountSummary
+               :account="account"
             />
-         </v-card-subtitle>
-         <v-divider />
-         <v-row>
-            <v-col
-               :cols="12"
-               v-for="section in documentGrid"
-               :key="section.date"
-               class="py-1"
+            <v-card-subtitle
+               id="search"
+               class="py-0"
             >
-               <v-card-subtitle
-                  class="py-0"
-               >
-                  <v-row class="py-0">
-                     <v-col
-                        class="py-0"
+               <v-text-field
+                  v-model="searchInput"
+                  dense
+                  outlined
+                  flat
+                  solo
+                  placeholder="Suche..."
+                  clearable
+                  inputmode="search"
+                  append-icon="mdi-menu-down"
+                  @click:append="toogleIntervalContainer()"
+               />
+               <v-fade-transition>
+                  <div v-show="showIntervalContainer === true">
+                     <v-row
+                        d-flex
+                        wrap
                      >
-                        {{ formatedDate(section.date) }}
-                     </v-col>
-                     <v-col class="text-right py-0">
-                        {{
-                           new Intl.NumberFormat("de-DE", format).format(section.balance)
-                        }}
-                     </v-col>
-                  </v-row>
-               </v-card-subtitle>
-               <v-list
-                  class="py-1"
-               >
-                  <DocItem
-                     v-for="doc in section.documents"
-                     :key="doc.id"
-                     :doc="doc"
-                     @click.native="showUpdateDialog(doc)"
-                 />
-                 <v-divider />
-               </v-list>
-            </v-col>
-         </v-row>
-         <v-card-text
-            class="openingBalance"
-         >
+                        <v-col
+                           :cols="12"
+                           lg="6"
+                           class="py-0"
+                        >
+                           <v-text-field
+                              label="Buchungen von"
+                              outlined
+                              dense
+                              v-model="period.from"
+                              type="date"
+                           />
+                        </v-col>
+                        <v-col
+                           :cols="12"
+                           lg="6"
+                           class="py-0"
+                        >
+                           <v-text-field 
+                              label="Buchungen bis"
+                              outlined
+                              dense
+                              v-model="period.to"
+                              type="date"
+                           />
+                        </v-col>
+                     </v-row>
+                     <v-row>
+                        <v-col
+                           class="pt-0"
+                        >
+                           <v-btn
+                              block
+                              outlined
+                              @click.native="fetchData()"
+                           >
+                              <v-icon>
+                                 mdi-magnify
+                              </v-icon>
+                              suchen
+                           </v-btn>
+                        </v-col>
+                     </v-row>
+                  </div>
+               </v-fade-transition>
+            </v-card-subtitle>
+            <v-divider />
             <v-row>
                <v-col
-                  :cols="8"
+                  :cols="12"
+                  v-for="section in documentGrid"
+                  :key="section.date"
+                  class="py-1"
                >
-                  Saldovortrag
-               </v-col>
-               <v-col
-                  :cols="4"
-                  class="text-right"
-               >
-                  {{
-                     new Intl.NumberFormat("de-DE", format).format(openingBalance)
-                  }}
+                  <v-card-subtitle
+                     class="py-0"
+                  >
+                     <v-row class="py-0">
+                        <v-col
+                           class="py-0"
+                        >
+                           {{ formatedDate(section.date) }}
+                        </v-col>
+                        <v-col class="text-right py-0">
+                           {{
+                              new Intl.NumberFormat("de-DE", format).format(section.balance)
+                           }}
+                        </v-col>
+                     </v-row>
+                  </v-card-subtitle>
+                  <v-list
+                     class="py-1"
+                  >
+                     <DocItem
+                        v-for="doc in section.documents"
+                        :key="doc.id"
+                        :doc="doc"
+                        @click.native="showUpdateDialog(doc)"
+                  />
+                  <v-divider />
+                  </v-list>
                </v-col>
             </v-row>
-         </v-card-text>
-
-         <v-card-actions>
-            <v-btn
-               block
-               depressed
-               @click.native="fetchMoreDocuments()"
+            <v-card-text
+               class="openingBalance"
             >
-               mehr Umsätze
-            </v-btn>
-         </v-card-actions>
-      </v-card>
+               <v-row>
+                  <v-col
+                     :cols="8"
+                  >
+                     Saldovortrag
+                  </v-col>
+                  <v-col
+                     :cols="4"
+                     class="text-right px-0"
+                  >
+                     {{
+                        new Intl.NumberFormat("de-DE", format).format(openingBalance)
+                     }}
+                  </v-col>
+               </v-row>
+            </v-card-text>
+
+            <v-card-actions>
+               <v-btn
+                  block
+                  depressed
+                  @click.native="fetchMoreDocuments()"
+               >
+                  mehr Umsätze
+               </v-btn>
+            </v-card-actions>
+         </v-card>
       <UpdateDocument
          :dialog ="dialog"
          :doc="selectedDoc"
@@ -110,6 +165,9 @@ import moment from 'moment'
 })
 export default class Documents extends Vue{
 
+   private loading = false;
+   private showIntervalContainer = false;
+
    // define format for numbers
    private format = numberFormat;
 
@@ -131,6 +189,7 @@ export default class Documents extends Vue{
 
    async beforeMount() {
       await this.fetchData()
+      this.loading = false
    }
 
    async fetchData() {
@@ -175,6 +234,10 @@ export default class Documents extends Vue{
 
    private toggleDialog() {
       this.dialog = !this.dialog
+   }
+
+   private toogleIntervalContainer() {
+      this.showIntervalContainer = !this.showIntervalContainer
    }
 
    // eslint-disable-next-line

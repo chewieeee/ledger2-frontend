@@ -8,15 +8,21 @@
                </v-card-title>
                <v-divider></v-divider>
                <v-card-text>
-                  <v-text-field 
-                     placeholder="Login"
-                     inputmode="email"
+                  <v-text-field
                      v-model="user"
+                     type="text"
+                     label="Login"
+                     outlined
+                     dense
+                     flat
                   />
-                  <v-text-field 
-                     type="password"
-                     placeholder="Passwort"
+                  <v-text-field
                      v-model="pass"
+                     type="password"
+                     label="Passwort"
+                     outlined
+                     dense
+                     flat
                   />
                   <v-btn
                      block
@@ -40,7 +46,7 @@ import moment from 'moment'
 
 @Component
 export default class Login extends Vue{
-   
+
    private user = '';
    private pass = '';
 
@@ -50,14 +56,14 @@ export default class Login extends Vue{
          pass: this.pass
       }
 
-      const fullPath = this.$route.query.redirect as string
+      const fullPath = (this.$route.query.redirect) ? this.$route.query.redirect as string : '/'
 
       const res = await this.axios.post(`/login`, credentials)
       if (res.status === 201) {
          this.saveTokenAsCookie(res.data)
-         this.$router.push('/')
+         this.$router.push('/') 
       }else{
-         console.log("nö"); 
+         //
       }
    }
 

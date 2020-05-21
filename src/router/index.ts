@@ -3,13 +3,24 @@ import VueRouter from 'vue-router'
 import Dashboard from '../views/Dashboard.vue'
 import Documents from '../views/Documents.vue'
 import Settings from '../views/Settings.vue'
+import Budgets from '../views/Budgets.vue'
 import Categories from '../views/Categories.vue'
+import Users from '../views/Users.vue'
 import Login from '../views/Login.vue'
-import api from '../plugins/api';
+import Fints from '../views/Fints.vue'
+import Bankaccounts from '../views/Bankaccounts.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '/accounts',
+    name: 'Bankkonten',
+    component: Bankaccounts,
+    meta: {
+      requireAuth: true
+    }
+  },
   {
     path: '/',
     name: 'Übersicht',
@@ -29,10 +40,7 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: Login,
-    meta: {
-      requireAuth: false
-    }
+    component: Login
   },
   {
     path: '/settings',
@@ -49,40 +57,61 @@ const routes = [
     meta: {
       requireAuth: true
     }
-  }
+   },
+   {
+      path: '/budgets',
+      name: 'Budgets',
+      component: Budgets,
+      meta: {
+         requireAuth: true
+      }
+   },
+   {
+      path: "/users",
+      name: "Benutzer",
+      component: Users,
+      meta: {
+         requireAuth: true
+      }
+   },
+   {
+      path: "/fints",
+      name: "Fints",
+      component: Fints,
+      meta: {
+         requireAuth: true
+      }
+   }
 ]
 
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes
+   mode: 'history',
+   base: process.env.BASE_URL,
+   routes,
+   scrollBehavior() {
+      return {x: 0, y: 0}
+   }
 })
 
-const validateToken = async (token: string) => {
-  const res = await api.post('/validate', {token: token})
-  return (res.status === 200) ? true : false
+const getToken = (key: string): string => {
+  return Vue.cookies.get(key) as string
 }
 
 router.beforeEach(async (to, from, next) => {
     const access = {
       "granted": {},
       "denied": {
-        path: '/login',
-        query: {
-          redirect: to.fullPath
-        }
+         path: '/login',
+         query: {
+           redirect: (to.fullPath) ? to.fullPath : "/"
+         }
       }
     }
 
   if (to.matched.some(record => (record.meta.requireAuth === true))){
-    const token = Vue.cookies.get('token') as string
-
+    const token = getToken('token')
     if (token !== null) {
-      const status = await validateToken(token)
-      console.log(status)
-      next(
-        (status === true) ? access.granted : access.denied
-      )
+      next(access.granted)
     }else{
       next(access.denied)
     }

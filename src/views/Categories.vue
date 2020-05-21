@@ -1,12 +1,14 @@
 <template>
    <div>
-      <h1 style="margin-left: 10px;" class="font-weight-thin">
+      <h1>
          Kategorien
       </h1>
       <v-card
          id="mainObject"
       >
-         <v-card-title>
+         <v-card-title
+            class="pb-0"
+         >
             <v-select
                v-model="selectedAccount"
                :items="accounts"
@@ -15,35 +17,47 @@
                clearable
                placeholder="Konto auswählen"
                id="focus"
+               outlined
+               dense
+               class="pb-0"
             />
+
+
          </v-card-title>
          <v-card-text
             v-if="selectedAccount > 0"
          >
-            <v-text-field
+            <v-text-field 
+               label="neue Kategorie"
                v-model="newCategoryTitle"
-               placeholder="neue Kategorie"
-               @keyup.enter="createCategory()"
+               clearable
+               outlined
+               flat
+               dense
+               required
+               :rules="[inputRules.required]"
+               @keypress.enter="createCategory()"
             />
 
-               <v-chip
-                  primary
-                  label
-                  close
-                  v-for="category in categorySelection"
-                  :key="category.id"
-                  @click:close="deleteCategory(category.id)"
-                  class="mx-1 my-1"
-               >
-                  {{ category.title }}
-               </v-chip>
+            <v-chip
+               primary
+               label
+               close
+               outlined
+               v-for="category in categorySelection"
+               :key="category.id"
+               @click:close="deleteCategory(category.id)"
+               class="mx-1 my-1"
+            >
+               {{ category.title }}
+            </v-chip>
          </v-card-text>
       </v-card>
    </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Ref } from 'vue-property-decorator'
 
 @Component
 export default class Categories extends Vue{
@@ -52,12 +66,21 @@ export default class Categories extends Vue{
    private categories: Category[] = []
    private selectedAccount = 0;
    private newCategoryTitle = ''
+   private validNewTitle = false
 
    async beforeMount() {
       Promise.all([
          this.fetchAccounts(),
          this.fetchCategories()
       ])
+   }
+
+   @Ref()
+   createCategoryForm!: HTMLFormElement
+
+
+   private inputRules = {
+      required: (value: string) => !!value || "Bitte einen Kategorietitel angeben"
    }
 
    async fetchAccounts() {
@@ -74,6 +97,8 @@ export default class Categories extends Vue{
    }
 
    async createCategory() {
+      if (this.newCategoryTitle === '') return
+
       const newCategory = {
          id: 0,
          title: this.newCategoryTitle,
@@ -81,20 +106,19 @@ export default class Categories extends Vue{
       }
       const res = await this.axios.post('/categories', newCategory)
       if (res.status === 201) {
-         console.log(res)
          newCategory.id = res.data.insertId
          this.categories.push(newCategory as Category)
          this.categories.sort((a, b) => {
             return a.title.localeCompare(b.title)
          })
-         this.newCategoryTitle = ''
+         this.newCategoryTitle = "";
       }
    }
+
 
    async deleteCategory(id: number) {
       const res = await this.axios.delete(`/categories/${id}`)
       if (res.status === 202) {
-         console.log(res)
          this.categories = this.categories.filter((cat: Category) => { return cat.id !== id})
       }
    }
