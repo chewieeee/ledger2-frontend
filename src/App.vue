@@ -41,7 +41,7 @@ export default class App extends Vue {
   get isMobile() {
     return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   }
-
+}
 </script>
 
 <style >
