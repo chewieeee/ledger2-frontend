@@ -11,9 +11,20 @@
          >
             <v-btn
                icon
+               color="primary"
                @click.native="editBankaccount(account)"
             >
                <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+            <v-btn
+               icon
+               color="secondary"
+            >
+               <v-icon
+                  @click="asignUser(bankaccount)"
+               >
+                  mdi-account-check-outline
+               </v-icon>
             </v-btn>
          </AccountCard>
          <AddBankaccount 
