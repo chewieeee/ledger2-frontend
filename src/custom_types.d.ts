@@ -54,7 +54,7 @@ declare interface FintsLogin {
    fintsUrl: string;
    login: string;
    pin: string;
-   blz: number;
+   blz: number | null;
    validFrom?: string;
    validTo?: string;
 }
