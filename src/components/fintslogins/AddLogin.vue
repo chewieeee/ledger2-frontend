@@ -1,5 +1,5 @@
 <template>
-   <Dialog
+   <BaseDialog
       :dialog="dialog"
       :fullscreen="true"
    >
@@ -99,18 +99,18 @@
 
          </v-card-text>
       </v-card>
-   </Dialog>
+   </BaseDialog>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Emit, Prop, Ref} from 'vue-property-decorator'
-import Dialog from '@/components/generic/dialogs/Dialog.vue'
+import BaseDialog from '@/components/generic/dialogs/Dialog.vue'
 import LedgerInput from '@/components/generic/form/Input.vue'
 import moment from 'moment'
 
 @Component({
    components: {
-      Dialog, LedgerInput
+      BaseDialog, LedgerInput
    }
 })
 export default class AddLogin extends Vue{
@@ -120,7 +120,7 @@ export default class AddLogin extends Vue{
    private login = "";
    private pin = "";
    private fintsUrl = "";
-   private blz!: number;
+   private blz = null;
    private validTo = "";
    private validFrom = "";
 

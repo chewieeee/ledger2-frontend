@@ -1,5 +1,5 @@
 <template>
-      <Dialog
+      <BaseDialog
          :dialog="dialog"
          :fullscreen="false"
          @clickedOutside="closeDialog"
@@ -104,18 +104,18 @@
                </v-row>
             </v-card-text>
          </v-card>
-      </Dialog>
+      </BaseDialog>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Watch, Prop } from 'vue-property-decorator';
-import Dialog from '@/components/generic/dialogs/Dialog.vue'
+import BaseDialog from '@/components/generic/dialogs/Dialog.vue'
 import { numberFormat } from '../../shared/document';
 import moment from 'moment';
 
 @Component({
    components: {
-      Dialog
+      BaseDialog
    }
 })
 export default class UpdateDocument extends Vue{

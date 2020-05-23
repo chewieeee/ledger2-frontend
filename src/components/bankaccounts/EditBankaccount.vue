@@ -1,6 +1,6 @@
 <template>
    <div>
-      <Dialog
+      <BaseDialog
          :dialog="dialog"
       >
          <v-card>
@@ -34,18 +34,18 @@
                />
             </v-card-text>
          </v-card>
-      </Dialog>
+      </BaseDialog>
    </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
-import Dialog from '@/components/generic/dialogs/Dialog.vue';
+import BaseDialog from '@/components/generic/dialogs/Dialog.vue';
 import LedgerInput from '@/components/generic/form/Input.vue';
 
 @Component({
    components: {
-      Dialog, LedgerInput
+      BaseDialog, LedgerInput
    }
 })
 export default class EditBankaccount extends Vue{

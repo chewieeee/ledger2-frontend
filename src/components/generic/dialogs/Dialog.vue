@@ -17,7 +17,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component
-export default class Dialog extends Vue {
+export default class BaseDialog extends Vue {
 
    @Prop({default: false})
    dialog!: boolean;
