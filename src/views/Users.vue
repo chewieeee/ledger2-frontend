@@ -2,33 +2,13 @@
    <div>
       <h1>Benutzer</h1>
       <div id="mainObject">
-         <v-card>
-            <v-card-text>
-               <v-list>
-                  <v-list-item
-                     v-for="user in users"
-                     :key="user.id"
-                  >
-                     <v-row>
-                        <v-col>
-                           {{ user.user }}
-                        </v-col>
-                        <v-col class="text-right">
-                           <v-btn
-                              :disabled="checkSingleUser"
-                              @click.native="deleteUser(user.id)"
-                              text
-                           >
-                              <v-icon>
-                                 mdi-delete-outline
-                              </v-icon>
-                           </v-btn>
-                        </v-col>
-                     </v-row>
-                  </v-list-item>
-               </v-list>
-            </v-card-text>
-         </v-card>
+         <UserCard
+            v-for="user in users"
+            :key="user.id"
+            :user="user"
+            :disableDeleteBtn="checkSingleUser"
+            @deleteUser="deleteUser($event)"
+         />
       </div>
       <LedgerFab
          icon="mdi-plus"
@@ -40,10 +20,11 @@
 import { Component, Vue } from "vue-property-decorator";
 import AddUser from '@/components/users/AddUser.vue';
 import LedgerFab from '@/components/generic/form/Fab.vue';
+import UserCard from "../components/users/UserCard.vue";
 
 @Component({
    components: {
-      AddUser, LedgerFab
+      AddUser, LedgerFab, UserCard
    }
 })
 export default class Users extends Vue{
@@ -71,10 +52,10 @@ export default class Users extends Vue{
       this.users.push(newUser as User)
    }
 
-   async deleteUser(id: number) {
-      const res = await this.axios.delete(`/users/${id}`)
+   async deleteUser(user: User) {
+      const res = await this.axios.delete(`/users/${user.id}`)
       if (res.status === 200) {
-         this.users = this.users.filter((user: User) => { return user.id !== id})
+         this.users = this.users.filter((_user: User) => { return _user.id !== user.id})
       }
    }
 
