@@ -14,7 +14,7 @@
             </v-card-text>
          </v-col>
          <v-col
-            class="justify-center"
+            class="justify-end d-flex"
             :cols=2
          >
             <slot></slot>
