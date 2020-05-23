@@ -79,7 +79,7 @@
                         block
                         bottom
                         outlined
-                        color="blue"
+                        color="primary"
                         @click.native="save()"
                         id="saveButton"
                      >
@@ -95,7 +95,7 @@
                         block
                         bottom
                         outlined
-                        color="red"
+                        color="deep-orange"
                         @click.native="closeDialog()"
                      >
                         abbrechen
