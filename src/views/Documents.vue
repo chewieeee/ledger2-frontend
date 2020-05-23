@@ -62,6 +62,7 @@
                            <v-btn
                               block
                               outlined
+                              color="primary"
                               @click.native="fetchData()"
                            >
                               <v-icon>
