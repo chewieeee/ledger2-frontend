@@ -2,13 +2,17 @@
    <div>
       <h1>Benutzer</h1>
       <div id="mainObject">
-         <UserCard
-            v-for="user in users"
-            :key="user.id"
-            :user="user"
-            :disableDeleteBtn="checkSingleUser"
-            @deleteUser="deleteUser($event)"
-         />
+         <v-card>
+            <v-list>
+               <UserItem 
+                  v-for="user in users"
+                  :key="user.id"
+                  :user="user"
+                  :disableDeleteBtn="checkSingleUser"
+                  @deleteUser="deleteUser($event)"
+               />
+            </v-list>
+         </v-card>
       </div>
       <LedgerFab
          icon="mdi-plus"
@@ -20,11 +24,11 @@
 import { Component, Vue } from "vue-property-decorator";
 import AddUser from '@/components/users/AddUser.vue';
 import LedgerFab from '@/components/generic/form/Fab.vue';
-import UserCard from "../components/users/UserCard.vue";
+import UserItem from "../components/users/UserItem.vue";
 
 @Component({
    components: {
-      AddUser, LedgerFab, UserCard
+      AddUser, LedgerFab, UserItem
    }
 })
 export default class Users extends Vue{
