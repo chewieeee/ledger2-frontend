@@ -15,9 +15,19 @@
             >
                <v-icon
                   color="primary"
-                  @click.native="EditDialog(bankaccount)"
+                  @click.native="editDialog(bankaccount)"
                >
                   mdi-pencil
+               </v-icon>
+            </v-btn>
+            <v-btn
+               icon
+            >
+               <v-icon
+                  color="secondary"
+                  @click="asignUser(bankaccount)"
+               >
+                  mdi-account-check-outline
                </v-icon>
             </v-btn>
          </v-list-item-action>
@@ -40,8 +50,12 @@ export default class BankaccountItem extends Vue{
    @Prop()
    divider!: boolean;
 
-   EditDialog(bankaccount: BankAccount) {
+   editDialog(bankaccount: BankAccount) {
       this.$emit("editBankaccount", this.bankaccount)
+   }
+
+   asignUser(bankaccount: BankAccount) {
+      //
    }
    
 }
