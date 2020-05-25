@@ -14,7 +14,12 @@
             </v-list>
          </v-card>
       </div>
+      <AddUser 
+         :dialog="addDialog"
+         @closeDialog="toggleDialog()"
+      />
       <LedgerFab
+         @click.native="toggleDialog()"
          icon="mdi-plus"
       />
    </div>
@@ -34,6 +39,11 @@ import UserItem from "../components/users/UserItem.vue";
 export default class Users extends Vue{
 
    private users: User[] = []
+   private addDialog = false
+
+   private toggleDialog() {
+      this.addDialog = !this.addDialog
+   }
 
    get checkSingleUser() {
       return (this.users?.length > 1) ? false : true

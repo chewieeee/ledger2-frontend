@@ -1,100 +1,108 @@
 <template>
-   <div>
-      <v-form
-         v-model="validNewUser"
-         ref="formCreateUser"
-      >
-         <v-card
-            class="mb-2"
-         >
-            <v-expansion-panels accordion>
-               <v-expansion-panel >
-                  <v-expansion-panel-header>neuen Zugang anlegen</v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                     <v-row>
-                        <v-col
-                           cols="12"
-                           sm="12"
-                        >
-                           <v-text-field
-                              v-model="newUser.user"
-                              placeholder="Benutzer-Login"
-                              :rules="[inputRules.required, inputRules.length]"
-                           />
-                        </v-col>
-                        <v-col
-                           cols="12"
-                           sm="12"
-                        >
-                           <v-text-field
-                              v-model="newUser.pass"
-                              placeholder="Passwort"
-                              type="password"
-                              :rules="[inputRules.required, inputRules.length]"
-                           />
-                        </v-col>
-                     </v-row>
-                     <v-row>
-                        <v-col>
-                           <v-btn
-                              :disabled="!validNewUser"
-                              block
-                              @click.native="createUser()"
-                           >
-                              <v-icon style="margin-right: 2px;">
-                                 mdi-account-plus-outline
-                              </v-icon>
-                              anlegen
-                           </v-btn>
-                        </v-col>
-                     </v-row>
-                  </v-expansion-panel-content>
-               </v-expansion-panel>
-            </v-expansion-panels>
-         </v-card>
-      </v-form>
-   </div>
+   <BaseDialog :dialog="dialog" :fullscreen="false" @clickedOutside="closeDialog()">
+      <v-card rounded max-width="500">
+         <v-card-title>
+            Benutzer anlegen
+         <v-spacer></v-spacer>
+         <v-btn small text @click.native="closeDialog()">
+            <v-icon>mdi-close</v-icon>
+         </v-btn>
+      </v-card-title>
+      <v-divider />
+      <v-card-text>
+         <v-row>
+            <v-col>
+               <v-form v-model="validNewUser" ref="formCreateUser">
+                  <v-text-field
+                     v-model="newUser.user"
+                     label="Benutzer-Login"
+                     outlined
+                     dense
+                     :rules="[inputRules.required, inputRules.length]"
+                  />
+                  <v-text-field
+                     v-model="newUser.pass"
+                     label="Passwort"
+                     type="password"
+                     outlined
+                     dense
+                     :rules="[inputRules.required, inputRules.length]"
+                  />
+                  <v-btn
+                     :disabled="!validNewUser"
+                     block
+                     outlined
+                     color="primary"
+                     @click.native="createUser()"
+                   >
+                     <v-icon style="margin-right: 2px;">mdi-account-plus-outline</v-icon>anlegen
+                  </v-btn>
+                  <v-btn
+                     block
+                     outlined
+                     color="red"
+                     @click.native="closeDialog()"
+                     class="mt-2"
+                  >
+                     <v-icon style="margin-right: 2px;">mdi-close</v-icon>abbrechen
+                  </v-btn>
+               </v-form>
+            </v-col>
+         </v-row>
+         </v-card-text>
+      </v-card>
+   </BaseDialog>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Ref } from 'vue-property-decorator'
+import { Vue, Component, Ref, Prop } from "vue-property-decorator";
+import BaseDialog from "../generic/dialogs/Dialog.vue";
 
-@Component
-export default class AddUser extends Vue{
+@Component({
+  components: {
+    BaseDialog
+  }
+})
+export default class AddUser extends Vue {
+  @Prop({ default: false })
+  dialog!: boolean;
 
-   @Ref()
-   formCreateUser!: HTMLFormElement
+  @Ref()
+  formCreateUser!: HTMLFormElement;
 
-   private newUser = {
-      user: '',
-      pass: ''
-   }
-   private validNewUser = false
+  private newUser = {
+    user: "",
+    pass: ""
+  };
+  private validNewUser = false;
 
-   // Rules
-   private inputRules = {
-      required: (value: string) => !!value || "Login ist ein Pflichtfeld",
-      length: (value: string) => value.length >= 8 || "Login muss mindestens 8 Zeichen lang sein"
-   }
+  private closeDialog() {
+    this.$emit("closeDialog");
+  }
 
-   async createUser() {
-      const res = await this.axios.post('/users', this.newUser)
-      if (res.status === 200) {
-         const newUser: User = {
-            id: res.data.insertId,
-            user: this.newUser.user
-         }
-         this.$emit("userCreated", newUser)
-         this.resetForm()
-      }
-   }
+  // Rules
+  private inputRules = {
+    required: (value: string) => !!value || "Login ist ein Pflichtfeld",
+    length: (value: string) =>
+      value.length >= 8 || "Login muss mindestens 8 Zeichen lang sein"
+  };
 
-   resetForm() {
-      this.formCreateUser.reset()
-      this.newUser.user = ''
-      this.newUser.pass = ''
-   }
+  async createUser() {
+    const res = await this.axios.post("/users", this.newUser);
+    if (res.status === 200) {
+      const newUser: User = {
+        id: res.data.insertId,
+        user: this.newUser.user
+      };
+      this.$emit("userCreated", newUser);
+      this.resetForm();
+    }
+  }
 
-
+  resetForm() {
+    this.formCreateUser.reset();
+    this.newUser.user = "";
+    this.newUser.pass = "";
+  }
 }
 </script>
