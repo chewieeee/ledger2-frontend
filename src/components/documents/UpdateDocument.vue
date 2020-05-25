@@ -11,9 +11,7 @@
             <v-card-title
                class="name"
             >
-               <h5>
-                  {{ doc.name }}
-               </h5>
+               {{ doc.name }}
                <v-spacer />
                <v-icon text
                   @click.native="closeDialog()"
