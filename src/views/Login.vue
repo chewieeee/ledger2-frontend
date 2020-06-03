@@ -1,7 +1,7 @@
 <template>
    <div>
-      <v-row d-flex align-center>
-         <v-col>
+      <v-row class="d-flex align-center jusify-center">
+         <v-col class="" width="100%">
             <v-card>
                <v-card-title>
                   <span class="login-header">Login</span>

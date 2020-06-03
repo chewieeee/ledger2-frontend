@@ -18,7 +18,7 @@
                      label="Benutzer-Login"
                      outlined
                      dense
-                     :rules="[inputRules.required, inputRules.length]"
+                     :rules="loginRules"
                   />
                   <v-text-field
                      v-model="newUser.pass"
@@ -26,7 +26,7 @@
                      type="password"
                      outlined
                      dense
-                     :rules="[inputRules.required, inputRules.length]"
+                     :rules="pwdRules"
                   />
                   <v-btn
                      :disabled="!validNewUser"
@@ -57,6 +57,7 @@
 <script lang="ts">
 import { Vue, Component, Ref, Prop } from "vue-property-decorator";
 import BaseDialog from "../generic/dialogs/Dialog.vue";
+import { InputValidation } from '../generic/form/inputRules'
 
 @Component({
   components: {
@@ -78,14 +79,11 @@ export default class AddUser extends Vue {
 
   private closeDialog() {
     this.$emit("closeDialog");
+    this.resetForm()
   }
 
-  // Rules
-  private inputRules = {
-    required: (value: string) => !!value || "Login ist ein Pflichtfeld",
-    length: (value: string) =>
-      value.length >= 8 || "Login muss mindestens 8 Zeichen lang sein"
-  };
+   private loginRules = new InputValidation({fieldName: "Login", minLength: 8, type: "login"}).validate()
+   private pwdRules = new InputValidation({fieldName: "Passwort", minLength: 8, type: "password"}).validate()
 
   async createUser() {
     const res = await this.axios.post("/users", this.newUser);
@@ -95,7 +93,7 @@ export default class AddUser extends Vue {
         user: this.newUser.user
       };
       this.$emit("userCreated", newUser);
-      this.resetForm();
+      this.resetForm();""
     }
   }
 
