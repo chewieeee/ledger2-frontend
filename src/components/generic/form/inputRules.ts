@@ -19,16 +19,10 @@ export class InputValidation {
       this.type = type
    }
 
-   private errorMessages = {
-      required: `${this.fieldName} ist ein Pflichtfeld`,
-      tooShort: `${this.fieldName} muss mindestens ${this.minLength} lang sein `,
-      email: `Die ist keine gültige Mailadresse`
-   }
-
    private isRequired = (value: string) => !!value || ValidationErrors.required(this.fieldName)
-   private checkLength = (value: string) => value.length >= this.minLength || ValidationErrors.tooShort(this.fieldName, this.minLength)
+   private checkLength = (value: string) => value?.length >= this.minLength || ValidationErrors.tooShort(this.fieldName, this.minLength)
    private checkMail = (value: string) => {
-      return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) || ValidationErrors.invalidMail();
+      return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/?.test(value) || ValidationErrors.invalidMail();
    }
 
    private login = () => [this.isRequired, this.checkLength];

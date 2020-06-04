@@ -27,7 +27,7 @@
                />
                <LedgerInput 
                   @changedValue="updateBankaccount.iban = $event"
-                  placeholder="Bezeichnung"
+                  placeholder="IBAN"
                   inputmode="text"
                   required="true"
                   :p_value="updateBankaccount.iban"
