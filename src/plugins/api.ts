@@ -3,7 +3,7 @@ import axios, {AxiosStatic} from 'axios';
 import router from '@/router';
 
 const api = axios.create({
-   baseURL: 'http://bp-mbp.local:5000',
+   baseURL: process.env.VUE_APP_API,
    headers: { 
       "Content-Type": "application/json"
    }
