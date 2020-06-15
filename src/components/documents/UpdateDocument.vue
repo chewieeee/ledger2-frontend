@@ -62,7 +62,7 @@
                         label="Kategorie"
                         :allow-overflow=true
                         :autofocus=false
-                        no-data-text="keine Kategorie gefunden"
+                        :no-data-text="noCategoryText"
                         @keyup.enter="setFocusToSave()"
                      />
                   </v-col>
@@ -169,6 +169,14 @@ export default class UpdateDocument extends Vue{
    private setFocusToSave() {
       const el = document.getElementById("saveButton")!
       el.focus()
+   }
+
+   get noCategoryText() {
+      enum errorMsgs {
+         emptyList = "Keine Kategorien zum Konto vorhanden",
+         noMatch = "Keine passende Kategorie vorhanden"
+      }
+      return (this.categories.length === 0) ? errorMsgs.emptyList : errorMsgs.noMatch
    }
 
    async updateDB() {
