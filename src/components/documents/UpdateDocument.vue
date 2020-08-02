@@ -129,7 +129,7 @@ export default class UpdateDocument extends Vue{
    @Watch('dialog')
    onDocumentChanged() {
       if (this.dialog === true) {
-         const firstMatchedCategory = this.categories.find((category: Category) => {return category.title === this.doc!.category})
+         const firstMatchedCategory = this.categories.find((category: Category) => category.title === this.doc!.category)
          if (firstMatchedCategory) {
             this.asignedCategory = firstMatchedCategory.id
          }
@@ -142,11 +142,11 @@ export default class UpdateDocument extends Vue{
       await this.fetchCategories(this.selectAccount)
    }
 
-      get selectAccount() {
+   get selectAccount() {
       return Number(this.$route.params.account)
    }
 
-   closeDialog() {
+   private closeDialog() {
       this.$emit("dialogClosed")
    }
 

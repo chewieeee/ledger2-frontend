@@ -18,20 +18,31 @@
                </v-btn>
             </v-card-title>
             <v-card-text>
-               <LedgerInput 
-                  @changedValue="updateBankaccount.title = $event"
+               <v-text-field
+                  v-model="bankaccount.title"
                   placeholder="Bezeichnung"
-                  inputmode="text"
+                  inputmode="test"
                   required="true"
-                  :p_value="updateBankaccount.title"
+                  outlined
+                  dense
                />
-               <LedgerInput 
-                  @changedValue="updateBankaccount.iban = $event"
+               <v-text-field
+                  v-model="bankaccount.iban"
                   placeholder="IBAN"
-                  inputmode="text"
+                  inputmode="test"
                   required="true"
-                  :p_value="updateBankaccount.iban"
+                  outlined
+                  dense
                />
+
+               <v-btn
+                  block
+                  text
+                  class="primary"
+                  @click.native="updateBankAccount()"
+               >
+                  <span class="white--text"> aktualisieren </span>
+               </v-btn>
             </v-card-text>
          </v-card>
       </BaseDialog>
@@ -41,11 +52,10 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import BaseDialog from '@/components/generic/dialogs/Dialog.vue';
-import LedgerInput from '@/components/generic/form/Input.vue';
 
 @Component({
    components: {
-      BaseDialog, LedgerInput
+      BaseDialog
    }
 })
 export default class EditBankaccount extends Vue{
@@ -56,15 +66,16 @@ export default class EditBankaccount extends Vue{
    @Prop()
    bankaccount!: BankAccount
 
-   private updateBankaccount!: BankAccount
-
-   closeDialog() {
+   private closeDialog() {
       this.$emit("closeDialog")
    }
 
-   @Watch("bankaccount")
-   modifyUpdateBankaccounts() {
-      this.updateBankaccount = this.bankaccount
+   private async updateBankAccount() {
+      const res = await this.axios.patch("/accounts", this.bankaccount)
+      if (res.status === 200) {
+         this.$emit("bankAccountUpdated")
+         this.closeDialog()
+      }
    }
 
 }

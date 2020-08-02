@@ -25,7 +25,7 @@ export default class BaseDialog extends Vue {
    fullscreen!: boolean;
 
    closeDialog() {
-      this.$emit("clickedOutside", true)
+      this.$parent.$emit("closeDialog")
    }
 
    get screenSize() {
